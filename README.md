@@ -59,6 +59,71 @@ npm run start
 
 The GraphQL playground will be accessible at `http://localhost:<PORT>/graphql`, where `<PORT>` is the port specified in your .env file or the default port.
 
+## GraphQL
+
+### Queries:
+
+- `getUserProfile`: Get the details of the authenticated user's profile.
+- `getUserWorkoutHistory`: Get the workout history of the authenticated user.
+- `getWorkoutRoutine`: Get details of a specific workout routine by ID.
+- `getAllWorkoutRoutines`: Get a list of all workout routines available in the system.
+- `getFitnessGoals`: Get the fitness goals of the authenticated user.
+- `getStatistics`: Get statistics and insights on the user's fitness activities and progress.
+- `getFriends`: Get a list of the user's friends.
+- `getPopularWorkouts`: Get a list of popular workouts based on the number of likes and comments.
+- `getRecommendedWorkoutRoutines`: Get workout routines recommended for the user based on their fitness goals and preferences.
+- `getLeaderboard`: Get a leaderboard of top users based on various fitness achievements (e.g., total workout time, weight lifted, etc.).
+- `getExerciseDetails`: Get details of a specific exercise by ID.
+- `getExerciseByName`: Get details of an exercise by its name.
+- `getWorkoutDetails`: Get details of a specific workout by ID.
+- `getWorkoutsByDate`: Get a list of workouts logged by the user on a specific date.
+- `getWorkoutsByExercise`: Get a list of workouts that include a specific exercise.
+- `getWorkoutsByRoutine`: Get a list of workouts performed as part of a specific routine.
+- `getFriendsWorkoutHistory`: Get the workout history of the user's friends.
+- `getWorkoutRecommendations`: Get workout recommendations based on the user's fitness goals and preferences.
+- `getExerciseCategories`: Get a list of exercise categories for better organization.
+
+### Mutations
+
+- `signUp`: Register a new user.
+- `logIn`: Log in an existing user.
+- `logOut`: Log out the authenticated user.
+- `updateProfile`: Update the user's profile details.
+- `createWorkoutRoutine`: Create a new workout routine.
+- `updateWorkoutRoutine`: Update an existing workout routine.
+- `deleteWorkoutRoutine`: Delete a workout routine.
+- `logWorkout`: Log a workout session with exercise details (sets, reps, weights).
+- `setFitnessGoals`: Set fitness goals for the authenticated user.
+- `followUser`: Follow another user.
+- `unfollowUser`: Unfollow a user.
+- `submitFeedback`: Submit feedback to the administrators.
+- `deleteAccount`: Delete the authenticated user's account (requires password confirmation).
+- `createExercise`: Create a new exercise to be used in workout routines.
+- `updateExercise`: Update an existing exercise's details.
+- `deleteExercise`: Delete an exercise from the system.
+- `logWeight`: Log the user's weight on a specific date for progress tracking.
+- `createExerciseCategory`: Create a new category to group exercises.
+- `updateExerciseCategory`: Update an existing exercise category's details.
+- `deleteExerciseCategory`: Delete an exercise category from the system.
+- `likeWorkout`: Like a workout posted by another user.
+- `commentOnWorkout`: Add a comment to a workout posted by another user.
+- `deleteWorkoutComment`: Delete a comment made on a workout.
+- `createWorkoutPost`: Create a post about a workout with additional details or notes.
+- `updateWorkoutPost`: Update an existing workout post's details.
+- `deleteWorkoutPost`: Delete a workout post.
+- `searchUsers`: Search for users based on their usernames or other criteria.
+- `searchWorkouts`: Search for workouts based on various filters (e.g., date, exercise, routine).
+- `createWorkoutPostComment`: Add a comment to a workout post made by another user.
+- `likeWorkoutPost`: Like a workout post made by another user.
+- `createExerciseReview`: Allow users to review an exercise based on their experience.
+- `updateExerciseReview`: Update an existing exercise review.
+- `deleteExerciseReview`: Delete an exercise review.
+- `createFriendRequest`: Send a friend request to another user.
+- `acceptFriendRequest`: Accept a friend request from another user.
+- `rejectFriendRequest`: Reject a friend request from another user.
+- `removeFriend`: Remove a user from the friend list.
+- `changePrivacySettings`: Allow users to manage their privacy settings for workout history and fitness goals.
+
 ## Project Structure
 
 The project structure will be organized as follows:
