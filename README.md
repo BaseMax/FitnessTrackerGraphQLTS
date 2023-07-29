@@ -19,7 +19,7 @@ The project will be developed using the following technologies:
 - TypeScript: The primary programming language for the backend and frontend (if applicable).
 - NestJS: A Node.js framework for building scalable and efficient server-side applications.
 - GraphQL: A query language for APIs, allowing clients to request exactly the data they need.
-- TypeORM: An Object-Relational Mapping (ORM) library for TypeScript that simplifies database operations.
+- Prisma: Next-generation Node.js and TypeScript ORM
 - PostgreSQL: A powerful open-source relational database.
 - JWT Authentication: JSON Web Tokens for user authentication and authorization.
 
