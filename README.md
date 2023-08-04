@@ -23,6 +23,9 @@ The project will be developed using the following technologies:
 - PostgreSQL: A powerful open-source relational database.
 - JWT Authentication: JSON Web Tokens for user authentication and authorization.
 
+## Screenshots
+![graphql]()
+
 ## Getting Started
 
 To run this project locally, follow these steps:
@@ -55,6 +58,11 @@ npm run build
 npm run start
 ```
 
+**ًRun Tests:**
+```bash
+npm run test:e2e
+```
+
 **Access the GraphQL playground:**
 
 The GraphQL playground will be accessible at `http://localhost:<PORT>/graphql`, where `<PORT>` is the port specified in your .env file or the default port.
@@ -63,34 +71,37 @@ The GraphQL playground will be accessible at `http://localhost:<PORT>/graphql`, 
 
 ### Queries:
 
-- `getUserProfile`: Get the details of the authenticated user's profile.
-- `getUserWorkoutHistory`: Get the workout history of the authenticated user.
-- `getWorkoutRoutine`: Get details of a specific workout routine by ID.
-- `getAllWorkoutRoutines`: Get a list of all workout routines available in the system.
-- `getFitnessGoals`: Get the fitness goals of the authenticated user.
+- `getUserProfile`: Get the details of the authenticated user's profile. 
+- `getUserWorkoutHistory`: Get the workout history of the authenticated user. 
+- `getWorkoutRoutine`: Get details of a specific workout routine by ID. 
+- `getAllWorkoutRoutines`: Get a list of all workout routines available in the system. 
+- `getFitnessGoals`: Get the fitness goals of the authenticated user. 
 - `getStatistics`: Get statistics and insights on the user's fitness activities and progress.
-- `getFriends`: Get a list of the user's friends.
-- `getPopularWorkouts`: Get a list of popular workouts based on the number of likes and comments.
+- `getFriends`: Get a list of the user's friends. 
+- `getFollowersList`: Get a list of the user followers. 
+- `getFollowingsList`: Get a list of the user followings. 
+- `getPopularWorkouts`: Get a list of popular workouts based on the number of likes and comments. 
 - `getRecommendedWorkoutRoutines`: Get workout routines recommended for the user based on their fitness goals and preferences.
-- `getLeaderboard`: Get a leaderboard of top users based on various fitness achievements (e.g., total workout time, weight lifted, etc.).
-- `getExerciseDetails`: Get details of a specific exercise by ID.
-- `getExerciseByName`: Get details of an exercise by its name.
-- `getWorkoutDetails`: Get details of a specific workout by ID.
-- `getWorkoutsByDate`: Get a list of workouts logged by the user on a specific date.
-- `getWorkoutsByExercise`: Get a list of workouts that include a specific exercise.
+- `getLeaderboard`: Get a leaderboard of top users based on various fitness achievements (e.g., total workout time, weight lifted, etc.). 
+- `getExerciseDetails`: Get details of a specific exercise by ID. 
+- `getExerciseByName`: Get details of an exercise by its name. 
+- `getWorkoutDetails`: Get details of a specific workout by ID. 
+- `getWorkoutsByDate`: Get a list of workouts logged by the user on a specific date. 
+- `getWorkoutsByExercise`: Get a list of workouts that include a specific exercise. 
 - `getWorkoutsByRoutine`: Get a list of workouts performed as part of a specific routine.
-- `getFriendsWorkoutHistory`: Get the workout history of the user's friends.
-- `getWorkoutRecommendations`: Get workout recommendations based on the user's fitness goals and preferences.
-- `getExerciseCategories`: Get a list of exercise categories for better organization.
+- `getFriendsWorkoutHistory`: Get the workout history of the user's friends. 
+- `getAllFeedbacks`:  Get all feedbacks, require admin role. 
+- `getWorkoutRecommendations`: Get workout recommendations based on the user's fitness goals and preferences. 
+- `getExerciseCategories`: Get a list of exercise categories for better organization. 
 
 ### Mutations
 
-- `signUp`: Register a new user.
-- `logIn`: Log in an existing user.
-- `logOut`: Log out the authenticated user.
-- `updateProfile`: Update the user's profile details.
+- `register`: Register a new user. 
+- `logIn`: Log in an existing user. 
+- `logOut`: Log out the authenticated user. 
+- `updateProfile`: Update the user's profile details. 
 - `createWorkoutRoutine`: Create a new workout routine.
-- `updateWorkoutRoutine`: Update an existing workout routine.
+- `updateWorkoutRoutine`: Update an existing workout routine. 
 - `deleteWorkoutRoutine`: Delete a workout routine.
 - `logWorkout`: Log a workout session with exercise details (sets, reps, weights).
 - `setFitnessGoals`: Set fitness goals for the authenticated user.
@@ -101,11 +112,11 @@ The GraphQL playground will be accessible at `http://localhost:<PORT>/graphql`, 
 - `createExercise`: Create a new exercise to be used in workout routines.
 - `updateExercise`: Update an existing exercise's details.
 - `deleteExercise`: Delete an exercise from the system.
-- `logWeight`: Log the user's weight on a specific date for progress tracking.
+- `logWeight`: Log the user's weight on a specific date for progress tracking. 
 - `createExerciseCategory`: Create a new category to group exercises.
 - `updateExerciseCategory`: Update an existing exercise category's details.
 - `deleteExerciseCategory`: Delete an exercise category from the system.
-- `likeWorkout`: Like a workout posted by another user.
+- `likeWorkout`: Like a workout posted by another user. note: If you have already liked it, it will be disliked.
 - `commentOnWorkout`: Add a comment to a workout posted by another user.
 - `deleteWorkoutComment`: Delete a comment made on a workout.
 - `createWorkoutPost`: Create a post about a workout with additional details or notes.
@@ -114,7 +125,7 @@ The GraphQL playground will be accessible at `http://localhost:<PORT>/graphql`, 
 - `searchUsers`: Search for users based on their usernames or other criteria.
 - `searchWorkouts`: Search for workouts based on various filters (e.g., date, exercise, routine).
 - `createWorkoutPostComment`: Add a comment to a workout post made by another user.
-- `likeWorkoutPost`: Like a workout post made by another user.
+- `likeWorkoutPost`: Like a workout post made by another user. note: If you have already liked it, it will be disliked.
 - `createExerciseReview`: Allow users to review an exercise based on their experience.
 - `updateExerciseReview`: Update an existing exercise review.
 - `deleteExerciseReview`: Delete an exercise review.
@@ -138,11 +149,10 @@ FitnessTrackerGraphQLTS/
 |   |   |-- workout/
 |   |   |-- ...
 |   |-- common/
-|   |   |-- dto/
+|   |   |-- decorators/
 |   |   |-- guards/
 |   |   |-- ...
 |   |-- database/
-|   |   |-- entities/
 |   |   |-- migrations/
 |   |   |-- ...
 |-- test/
