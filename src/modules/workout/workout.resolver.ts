@@ -66,6 +66,11 @@ export class WorkoutResolver {
     return this.workoutService.getStatistics(userId);
   }
 
+  @Query(() => Workout)
+  getWorkoutRoutine(@Args('id', { type: () => Int }) id: number) {
+    return this.workoutService.getWorkoutRoutine(id),
+  }
+
   @Query(() => [Workout])
   getWorkoutsByDate(
     @GetCurrentUserId() userId: number,

@@ -170,6 +170,7 @@ type Query {
   getWorkoutsByExercise(exerciseId: Int!): [Workout!]!
   getWorkoutRecommendations: [Workout!]!
   getStatistics: FitnessStatistics!
+  getWorkoutRoutine(id: Int!): Workout!
   getWorkoutsByDate(date: DateTime!): [Workout!]!
   getFriendsWorkoutHistory: [Workout!]!
   getPopularWorkouts: [Workout!]!

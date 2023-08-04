@@ -114,6 +114,12 @@ export class WorkoutService {
 
     return totalWorkouts;
   }
+
+  async getWorkoutRoutine(id: number) {
+    return this.prisma.workout.findUnique({
+      where: { id },
+    });
+  }
   async logWorkout(userId: number, logWorkoutInput: LogWorkoutInput) {
     return this.prisma.workoutLog.create({
       data: {
