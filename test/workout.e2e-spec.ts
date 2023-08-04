@@ -31,6 +31,7 @@ describe('workout', () => {
   beforeAll(async () => {
     await prisma.user.deleteMany();
     await prisma.workout.deleteMany();
+    await prisma.post.deleteMany();
 
     const user = await prisma.user.create({
       data: {
@@ -64,8 +65,54 @@ describe('workout', () => {
   afterAll(async () => {
     await prisma.workout.deleteMany();
     await prisma.user.deleteMany();
+    await prisma.post.deleteMany();
 
     await app.close();
+  });
+
+  it('create workout post', async () => {
+    const user = await prisma.user.create({
+      data: {
+        username: 'sswsUser',
+        password: await hashService.hash('12345678'),
+      },
+    });
+
+    const workout = await prisma.workout.create({
+      data: {
+        name: 'my workout',
+        user: { connect: { id: user.id } },
+      },
+    });
+
+    const payload: JwtPayload = {
+      id: user.id,
+      username: user.role,
+      role: user.role,
+    };
+
+    const newToken = jwtService.sign(payload);
+
+    const mutation = `mutation {
+      createWorkoutPost(createPostInput:{
+        text: "great workout!"
+        workoutId: ${workout.id}
+      }) {
+        id
+        text
+        numberOfLikes
+      }
+    }`;
+
+    const response = await request(app.getHttpServer())
+      .post('/graphql')
+      .set({ Authorization: `Bearer ${newToken}` })
+      .send({ query: mutation });
+
+    expect(response.status).toBe(200);
+
+    const { data } = response.body;
+    expect(data.createWorkoutPost).toBeDefined();
   });
 
   it('get All Workouts', async () => {

@@ -59,6 +59,25 @@ describe('user (e2e)', () => {
     await app.close();
   });
 
+  it('search users', async () => {
+    const username = 't';
+    const mutation = `mutation {
+      searchUsers(username: "${username}") {
+        id
+        username
+      }
+    }`;
+
+    const response = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({ query: mutation });
+
+    expect(response.status).toBe(200);
+
+    const { data } = response.body;
+    expect(Array.isArray(data.searchUsers)).toBe(true);
+  });
+
   it('update profile', async () => {
     const input = {
       firstName: 'john',
