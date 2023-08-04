@@ -9,6 +9,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  await app.listen(4000);
+
+  const port = parseInt(process.env.PORT);
+  await app.listen(port);
+
+  console.info(`API documentation: http://localhost:${port}/graphql`);
 }
 bootstrap();

@@ -1,9 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { HashService } from '../auth/services/hash.service';
 import { UpdateProfileInput } from './dto/update-profile';
+import { ChangePrivacyInput } from './dto/change-privacy.input';
 
 @Injectable()
 export class UserService {
@@ -12,8 +17,36 @@ export class UserService {
     private readonly hashService: HashService,
   ) {}
 
+  async changePrivacySettings(
+    userId: number,
+    changePrivacyInput: ChangePrivacyInput,
+  ) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        fitnessGoalsPrivacy: changePrivacyInput?.fitnessGoalsPrivacy,
+        workoutHistoryPrivacy: changePrivacyInput?.workoutHistoryPrivacy,
+      },
+    });
+  }
+
+  async getLeaderboard() {
+    const users = await this.prisma.user.findMany({
+      include: { workoutLog: { select: { weight: true } } },
+      orderBy: {
+        workoutLog: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    if (!users || users.length === 0)
+      throw new NotFoundException('users not found!');
+
+    return users;
+  }
   async updateProfile(userId: number, updateProfileInput: UpdateProfileInput) {
-    await this.prisma.profile.upsert({
+    return this.prisma.profile.upsert({
       where: { userId },
       create: {
         firstName: updateProfileInput?.firstName,
@@ -35,32 +68,55 @@ export class UserService {
         bio: updateProfileInput?.bio,
       },
     });
-
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-      include: { profile: true },
-    });
   }
 
-  getUserProfile(userId: number) {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-      include: { profile: true },
+  async logWeight(userId: number, weight: number) {
+    await this.prisma.weightLog.create({
+      data: {
+        user: {
+          connect: { id: userId },
+        },
+        weight,
+      },
     });
+
+    return this.prisma.user.findUnique({ where: { id: userId } });
   }
 
-  getFollowersList(userId: number) {
-    return this.prisma.user.findFirst({
-      where: { id: userId },
-      include: { followers: true },
+  async getUserProfile(userId: number) {
+    const profile = await this.prisma.profile.findUnique({
+      where: { userId },
+      include: { user: true },
     });
+
+    if (!profile)
+      throw new NotFoundException('Please register your profile information');
+
+    return profile;
   }
 
-  getFollowingsList(userId: number) {
-    return this.prisma.user.findFirst({
+  async getFollowersList(userId: number) {
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { followings: true },
+      include: { followers: { include: { following: true } } },
     });
+
+    if (!user.followers || user.followers.length === 0)
+      throw new NotFoundException('You have no followers');
+
+    return user.followers.map((data) => data.following);
+  }
+
+  async getFollowingsList(userId: number) {
+    const user = await this.prisma.user.findFirst({
+      where: { id: userId },
+      include: { followings: { include: { follower: true } } },
+    });
+
+    if (!user.followings || user.followings.length === 0)
+      throw new NotFoundException('You have no followings');
+
+    return user.followings.map((data) => data.follower);
   }
 
   async followUser(userId: number, followingId: number) {
@@ -123,9 +179,6 @@ export class UserService {
         username: {
           contains: username,
         },
-      },
-      select: {
-        password: false,
       },
     });
   }

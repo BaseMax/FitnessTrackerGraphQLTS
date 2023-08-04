@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Float } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
@@ -7,6 +7,8 @@ import { GetCurrentUserId, Public, Roles } from '../../common/decorators';
 import { ParseIntPipe } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { UpdateProfileInput } from './dto/update-profile';
+import { Profile } from './entities/profile.entity';
+import { ChangePrivacyInput } from './dto/change-privacy.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -18,12 +20,18 @@ export class UserResolver {
     return this.userService.create(createUserInput);
   }
 
-  @Query(() => User)
+  @Public()
+  @Query(() => [User])
+  getLeaderboard() {
+    return this.userService.getLeaderboard();
+  }
+
+  @Query(() => Profile)
   getUserProfile(@GetCurrentUserId() userId: number) {
     return this.userService.getUserProfile(+userId);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => Profile)
   updateProfile(
     @GetCurrentUserId() userId: number,
     @Args('updateProfileInput') updateProfileInput: UpdateProfileInput,
@@ -89,5 +97,21 @@ export class UserResolver {
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.userService.remove(id);
+  }
+
+  @Mutation(() => User)
+  logWeight(
+    @GetCurrentUserId() userId: number,
+    @Args('weight', { type: () => Float }) weight: number,
+  ) {
+    this.userService.logWeight(userId, weight);
+  }
+
+  @Mutation(() => User)
+  changePrivacySettings(
+    @GetCurrentUserId() userId: number,
+    @Args('changePrivacyInput') changePrivacyInput: ChangePrivacyInput,
+  ) {
+    return this.userService.changePrivacySettings(+userId, changePrivacyInput);
   }
 }

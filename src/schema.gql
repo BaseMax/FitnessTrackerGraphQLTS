@@ -2,28 +2,363 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Like {
+  id: Int!
+  user: User!
+  workout: Workout!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Comment {
+  id: Int!
+  text: String!
+  user: User!
+  workout: Workout!
+  createdAt: DateTime!
+}
+
+type Workout {
+  id: Int!
+  name: String!
+  user: User!
+  comments: [Comment!]
+  likes: [Like!]
+  numberOfLikes: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Feedback {
+  id: Int!
+  text: String!
+  user: User!
+  createdAt: DateTime!
+}
+
+type Profile {
+  id: Int!
+  firstName: String
+  lastName: String
+  weight: Int
+  height: Int
+  image: String
+  bio: String
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Goal {
+  id: Int!
+  name: String!
+  type: String!
+  target: String!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type User {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: Int!
+  email: String
+  username: String!
+  followersCount: Int!
+  workouts: [Workout!]
+  feedbacks: [Feedback!]
+  comments: [Comment!]
+  likes: [Like]!
+  profile: Profile
+  goal: [Goal!]
+  workoutHistoryPrivacy: PrivacySetting!
+  fitnessGoalsPrivacy: PrivacySetting!
+}
+
+"""Privacy settings for workout history and fitness goals"""
+enum PrivacySetting {
+  public
+  private
+}
+
+type AuthPayload {
+  access_token: String!
+}
+
+type Request {
+  id: Int!
+  status: requestStatus!
+  sender: User!
+  receiver: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum requestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+type FitnessStatistics {
+  totalWorkouts: Int!
+}
+
+type ExerciseReview {
+  id: Int!
+  text: String!
+  rate: Float!
+  exercise: Exercise!
+  user: User!
+}
+
+type ExerciseCategory {
+  id: Int!
+  exercises: [Exercise!]!
+  name: String!
+}
+
+type Exercise {
+  id: Int!
+  name: String!
+  sets: Int!
+  reps: Int!
+  weight: Float!
+  workout: Workout!
+  category: ExerciseCategory
+  reviews: [ExerciseReview!]
+}
+
+type PostLike {
+  id: Int!
+  user: User!
+  post: Post!
+}
+
+type PostComment {
+  id: Int!
+  text: String!
+  user: User!
+  post: Post!
+  createdAt: DateTime!
+}
+
+type Post {
+  id: Int!
+  text: String!
+  image: String
+  numberOfLikes: Int!
+  likes: [PostLike!]!
+  comments: [PostComment!]!
+  workout: Workout!
+  createdAt: DateTime!
+  updatedAt: DateTime
 }
 
 type Query {
+  getLeaderboard: [User!]!
+  getUserProfile: Profile!
+  getFollowersList: [User!]!
+  getFollowingsList: [User!]!
   user(id: Int!): User!
+  getFriends: [User!]!
+  getAllFeedbacks: [Feedback!]!
+  getUserWorkoutHistory: [Workout!]!
+  getWorkoutsByExercise(exerciseId: Int!): [Workout!]!
+  getWorkoutRecommendations: [Workout!]!
+  getStatistics: FitnessStatistics!
+  getWorkoutsByDate(date: DateTime!): [Workout!]!
+  getFriendsWorkoutHistory: [Workout!]!
+  getPopularWorkouts: [Workout!]!
+  getAllWorkoutRoutines: [Workout!]!
+  getWorkoutDetails(id: Int!): Workout!
+  searchWorkouts(name: String!, date: DateTime): [Workout!]!
+  exercise: [Exercise!]!
+  getExerciseByName(name: String!): Exercise!
+  getExerciseDetails(id: Int!): Exercise!
+  getExerciseCategories: [ExerciseCategory!]!
+  exerciseCategory(id: Int!): ExerciseCategory!
+  exerciseReview(id: Int!): ExerciseReview!
+  getFitnessGoals: [Goal!]!
+  goal(id: Int!): Goal!
+  post(id: Int!): Post!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  followUser(followingId: Float!): User!
+  unfollowUser(followingId: Float!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
+  deleteAccount(password: String!): User!
+  searchUsers(username: String!): [User!]!
   removeUser(id: Int!): User!
+  logWeight(weight: Float!): User!
+  changePrivacySettings(changePrivacyInput: ChangePrivacyInput!): User!
+  logIn(loginInput: LoginInput!): AuthPayload!
+  register(registerInput: RegisterInput!): AuthPayload!
+  logOut(id: Int!): AuthPayload!
+  createFriendRequest(friendId: Float!): Request!
+  acceptFriendRequest(id: Int!): User!
+  rejectFriendRequest(id: Int!): Request!
+  removeFriend(id: Int!): User!
+  submitFeedback(text: String!): Feedback!
+  likeWorkout(workoutId: Float!): Workout!
+  commentOnWorkout(createCommentInput: CreateCommentInput!): Workout!
+  deleteWorkoutComment(commentId: Int!): Workout!
+  createWorkoutRoutine(createWorkoutInput: CreateWorkoutInput!): Workout!
+  updateWorkoutRoutine(updateWorkoutInput: UpdateWorkoutInput!): Workout!
+  logWorkout(logWorkoutInput: LogWorkoutInput!): Workout!
+  deleteWorkoutRoutine(workoutId: Int!): Workout!
+  createExercise(createExerciseInput: CreateExerciseInput!): Exercise!
+  updateExercise(updateExerciseInput: UpdateExerciseInput!): Exercise!
+  deleteExercise(id: Int!): Exercise!
+  createExerciseCategory(createExerciseCategoryInput: CreateExerciseCategoryInput!): ExerciseCategory!
+  updateExerciseCategory(updateExerciseCategoryInput: UpdateExerciseCategoryInput!): ExerciseCategory!
+  removeExerciseCategory(id: Int!): ExerciseCategory!
+  createExerciseReview(createExerciseReviewInput: CreateExerciseReviewInput!): ExerciseReview!
+  updateExerciseReview(updateExerciseReviewInput: UpdateExerciseReviewInput!): ExerciseReview!
+  removeExerciseReview(id: Int!): ExerciseReview!
+  setFitnessGoals(createGoalInput: CreateGoalInput!): Goal!
+  updateGoal(updateGoalInput: UpdateGoalInput!): Goal!
+  removeGoal(id: Int!): Goal!
+  createWorkoutPost(createPostInput: CreatePostInput!): Post!
+  likeWorkoutPost(id: Int!): Post!
+  createWorkoutPostComment(createPostCommentInput: CreatePostCommentInput!): Post!
+  updateWorkoutPost(updatePostInput: UpdatePostInput!): Post!
+  deleteWorkoutPost(id: Int!): Post!
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  username: String!
+  password: String!
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  weight: Int
+  height: Int
+  image: String
+  bio: String
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  username: String
+  password: String
+  id: Int!
+}
+
+input ChangePrivacyInput {
+  workoutHistoryPrivacy: PrivacySetting
+  fitnessGoalsPrivacy: PrivacySetting
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+input RegisterInput {
+  username: String!
+  password: String!
+}
+
+input CreateCommentInput {
+  workoutId: Int!
+  text: String!
+}
+
+input CreateWorkoutInput {
+  name: String!
+}
+
+input UpdateWorkoutInput {
+  name: String
+  workoutId: Int!
+}
+
+input LogWorkoutInput {
+  exerciseId: Int!
+  date: DateTime!
+  sets: Int!
+  reps: Int!
+  weight: Float!
+}
+
+input CreateExerciseInput {
+  name: String!
+  sets: Int!
+  reps: Int!
+  weight: Float!
+  workoutId: Int!
+  categoryId: Int
+  categoryName: String
+}
+
+input UpdateExerciseInput {
+  name: String
+  sets: Int
+  reps: Int
+  weight: Float
+  workoutId: Int
+  categoryId: Int
+  categoryName: String
+  id: Int!
+}
+
+input CreateExerciseCategoryInput {
+  name: String!
+}
+
+input UpdateExerciseCategoryInput {
+  name: String
+  id: Int!
+}
+
+input CreateExerciseReviewInput {
+  text: String!
+  rate: Float
+  exerciseId: Int!
+}
+
+input UpdateExerciseReviewInput {
+  text: String
+  rate: Float
+  exerciseId: Int
+  id: Int!
+}
+
+input CreateGoalInput {
+  name: String!
+  type: String!
+  target: String!
+}
+
+input UpdateGoalInput {
+  name: String
+  type: String
+  target: String
+  id: Int!
+}
+
+input CreatePostInput {
+  text: String!
+  image: String
+  workoutId: Int!
+}
+
+input CreatePostCommentInput {
+  postId: Int!
+  text: String!
+}
+
+input UpdatePostInput {
+  text: String
+  image: String
+  workoutId: Int
   id: Int!
 }
